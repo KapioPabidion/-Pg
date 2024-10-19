@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Цезоря", "Цезоря.csproj", "{B3D00D6A-D6E7-4CB7-B367-9CF4F39791BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Интерфейс(консоль)", "ConsoleApp1\Интерфейс(консоль).csproj", "{8C0E05DF-0B65-420D-84F4-3931663B4E15}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B3D00D6A-D6E7-4CB7-B367-9CF4F39791BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3D00D6A-D6E7-4CB7-B367-9CF4F39791BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3D00D6A-D6E7-4CB7-B367-9CF4F39791BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3D00D6A-D6E7-4CB7-B367-9CF4F39791BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C0E05DF-0B65-420D-84F4-3931663B4E15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C0E05DF-0B65-420D-84F4-3931663B4E15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C0E05DF-0B65-420D-84F4-3931663B4E15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C0E05DF-0B65-420D-84F4-3931663B4E15}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B518D06B-F2C5-49F9-AFAA-A371B5D46259}
+	EndGlobalSection
+EndGlobal
