@@ -1,12 +1,12 @@
-﻿using System;
-
-namespace Caesar
+﻿namespace Caesar
 {
     // Создание публичного класса CaesarCipher для шифрования и дешифрования текста
     public class CaesarCipher
     {
         // Строка с символами русской азбуки
         const string alfabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+
+        /// добавить латинский алфавит и числа
 
         // Метод для кодирования и декодирования текста
         private string CodeEncode(string text, int k)
