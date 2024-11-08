@@ -1,100 +1,82 @@
 ﻿using Caesar;
 using System;
-
+using System.IO;
 class ConsoleCode
 {
     static void Main(string[] args)
     {
-        // Создаем экземпляр класса CaesarCipher
         var cipher = new CaesarCipher();
-
-        // Флаг для продолжения цикла
         bool continueLoop = true;
-
         while (continueLoop)
         {
-            // Переменная для хранения выбора режима
             int modeChoice;
             while (true)
             {
-                // Выводим сообщение о выборе режима
-                Console.Write("Выберите режим (1 - Зашифровать, 2 - Расшифровать): ");
-                // Пытаемся преобразовать ввод в целое число
-                if (int.TryParse(Console.ReadLine(), out modeChoice) && (modeChoice == 1 || modeChoice == 2))
+                Console.Write("Выберите режим (1 - Зашифровать текст, 2 - Расшифровать текст, 3 - Зашифровать файл, 4 - Расшифровать файл): ");
+                if (int.TryParse(Console.ReadLine(), out modeChoice) && (modeChoice >= 1 && modeChoice <= 4))
                 {
-                    // Если ввод корректен, выходим из цикла
                     break;
                 }
-                // Если ввод некорректен, выводим сообщение об ошибке
-                Console.WriteLine("Некорректный выбор режима. Пожалуйста, выберите 1 или 2.");
+                Console.WriteLine("Некорректный выбор режима. Пожалуйста, выберите 1, 2, 3 или 4.");
                 Console.WriteLine(); // Добавляем пустую строку для разделения
             }
-
-            /// блоки кода под условиями modeChoice == n вынести в отдельные функции в рамках проекта консольного приложения
-            /// Здесь их вызывать
-            if (modeChoice == 1)
+            if (modeChoice == 1) // Шифрование текста
             {
-                // Выводим сообщение о вводе текста
                 Console.Write("Введите текст: ");
-                // Считываем ввод текста
                 var message = Console.ReadLine();
-                // Переменная для хранения секретного ключа
-                int secretKey;
-                while (true)
-                {
-                    // Выводим сообщение о вводе ключа
-                    Console.Write("Введите ключ: ");
-                    // Пытаемся преобразовать ввод в целое число
-                    if (int.TryParse(Console.ReadLine(), out secretKey))
-                    {
-                        // Если ввод корректен, выходим из цикла
-                        break;
-                    }
-                    // Если ввод некорректен, выводим сообщение об ошибке
-                    Console.WriteLine("Некорректный ключ. Пожалуйста, введите целое число.");
-                    Console.WriteLine(); // Добавляем пустую строку для разделения
-                }
-                // Шифруем текст с помощью секретного ключа
+                int secretKey = GetSecretKey();
                 var encryptedText = cipher.Encrypt(message, secretKey);
-                // Выводим зашифрованный текст
                 Console.WriteLine("Зашифрованное сообщение: {0}", encryptedText);
-                Console.WriteLine(); // Добавляем пустую строку для разделения
+                Console.WriteLine();
+                SaveEncryptedMessage(encryptedText);
             }
-            else if (modeChoice == 2)
+            else if (modeChoice == 2) // Дешифрование текста
             {
-                // Выводим сообщение о вводе зашифрованного текста
                 Console.Write("Введите зашифрованный текст: ");
-                // Считываем ввод зашифрованного текста
                 var encryptedMessage = Console.ReadLine();
-                // Переменная для хранения секретного ключа
-                int secretKey;
-                while (true)
-                {
-                    // Выводим сообщение о вводе ключа
-                    Console.Write("Введите ключ: ");
-                    // Пытаемся преобразовать ввод в целое число
-                    if (int.TryParse(Console.ReadLine(), out secretKey))
-                    {
-                        // Если ввод корректен, выходим из цикла
-                        break;
-                    }
-                    // Если ввод некорректен, выводим сообщение об ошибке
-                    Console.WriteLine("Некорректный ключ. Пожалуйста, введите целое число.");
-                    Console.WriteLine(); // Добавляем пустую строку для разделения
-                }
-                // Расшифровываем текст с помощью секретного ключа
+                int secretKey = GetSecretKey();
                 var decryptedText = cipher.Decrypt(encryptedMessage, secretKey);
-                // Выводим расшифрованный текст
                 Console.WriteLine("Расшифрованное сообщение: {0}", decryptedText);
                 Console.WriteLine(); // Добавляем пустую строку для разделения
             }
-            // Выводим сообщение о продолжении работы
+            else if (modeChoice == 3) // Шифрование файла
+            {
+                Console.Write("Введите путь к файлу для шифрования: ");
+                string inputFilePath = Console.ReadLine();
+                if (File.Exists(inputFilePath))
+                {
+                    DateTime creationTime = File.GetCreationTime(inputFilePath);
+                    int secretKey = creationTime.Minute; // Используем минуты создания файла как ключ
+                    string fileContent = File.ReadAllText(inputFilePath);
+                    var encryptedText = cipher.Encrypt(fileContent, secretKey);
+                    SaveEncryptedFile(encryptedText, "Зашифрованный_" + Path.GetFileName(inputFilePath));
+                }
+                else
+                {
+                    Console.WriteLine("Файл не найден. Пожалуйста, проверьте путь и попробуйте снова.");
+                }
+            }
+            else if (modeChoice == 4) // Дешифрование файла
+            {
+                Console.Write("Введите путь к зашифрованному файлу: ");
+                string inputFilePath = Console.ReadLine();
+                if (File.Exists(inputFilePath))
+                {
+                    DateTime creationTime = File.GetCreationTime(inputFilePath);
+                    int secretKey = creationTime.Minute; // Используем минуты создания файла как ключ
+                    string encryptedContent = File.ReadAllText(inputFilePath);
+                    var decryptedText = cipher.Decrypt(encryptedContent, secretKey);
+                    Console.WriteLine("Расшифрованное сообщение: {0}", decryptedText);
+                    Console.WriteLine(); // Добавляем пустую строку для разделения
+                }
+                else
+                {
+                    Console.WriteLine("Файл не найден. Пожалуйста, проверьте путь и попробуйте снова.");
+                }
+            }
             Console.Write("Желаете продолжить? (д/any): ");
-            // Считываем ввод о продолжении работы
             var continueChoice = Console.ReadLine();
             Console.WriteLine(); // Добавляем пустую строку для разделения
-
-            // Если пользователь не хочет продолжать, выходим из цикла
             if (continueChoice.ToLower() != "д")
             {
                 continueLoop = false;
@@ -102,5 +84,49 @@ class ConsoleCode
             }
         }
     }
+    private static int GetSecretKey()
+    {
+        int secretKey;
+        while (true)
+        {
+            Console.Write("Введите ключ: ");
+            if (int.TryParse(Console.ReadLine(), out secretKey))
+            {
+                break;
+            }
+            Console.WriteLine("Некорректный ключ. Пожалуйста, введите целое число.");
+            Console.WriteLine();
+        }
+        return secretKey;
+    }
+    // Метод для сохранения зашифрованного сообщения в текстовый файл
+    private static void SaveEncryptedMessage(string encryptedText)
+    {
+        Console.Write("Введите имя файла для сохранения (без расширения): ");
+        var fileName = Console.ReadLine() + ".txt";
+        try
+        {
+            File.WriteAllText(fileName, encryptedText);
+            Console.WriteLine("Зашифрованное сообщение успешно сохранено в файл: {0}", fileName);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Произошла ошибка при сохранении файла: " + ex.Message);
+        }
+    }
+    // Метод для сохранения зашифрованного файла в папке "Загрузки"
+    private static void SaveEncryptedFile(string encryptedText, string originalFileName)
+    {
+        string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+        string filePath = Path.Combine(downloadsPath, originalFileName);
+        try
+        {
+            File.WriteAllText(filePath, encryptedText);
+            Console.WriteLine("Зашифрованный файл успешно сохранен в папку 'Загрузки': {0}", filePath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Произошла ошибка при сохранении файла: " + ex.Message);
+        }
+    }
 }
-
