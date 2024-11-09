@@ -18,7 +18,7 @@ class ConsoleCode
                     break;
                 }
                 Console.WriteLine("Некорректный выбор режима. Пожалуйста, выберите 1, 2, 3 или 4.");
-                Console.WriteLine(); // Добавляем пустую строку для разделения
+                Console.WriteLine();
             }
             if (modeChoice == 1) // Шифрование текста
             {
@@ -37,11 +37,12 @@ class ConsoleCode
                 int secretKey = GetSecretKey();
                 var decryptedText = cipher.Decrypt(encryptedMessage, secretKey);
                 Console.WriteLine("Расшифрованное сообщение: {0}", decryptedText);
-                Console.WriteLine(); // Добавляем пустую строку для разделения
+                Console.WriteLine();
             }
             else if (modeChoice == 3) // Шифрование файла
             {
-                Console.Write("Введите путь к файлу для шифрования: ");
+                string userName = Environment.UserName;
+                Console.Write($"Введите путь к файлу для шифрования (например, C:\\Users\\{userName}\\Documents\\example.txt): ");
                 string inputFilePath = Console.ReadLine();
                 if (File.Exists(inputFilePath))
                 {
@@ -58,7 +59,8 @@ class ConsoleCode
             }
             else if (modeChoice == 4) // Дешифрование файла
             {
-                Console.Write("Введите путь к зашифрованному файлу: ");
+                string userName = Environment.UserName;
+                Console.Write($"Введите путь к зашифрованному файлу (например, C:\\Users\\{userName}\\Documents\\Зашифрованный_example.txt): ");
                 string inputFilePath = Console.ReadLine();
                 if (File.Exists(inputFilePath))
                 {
@@ -67,7 +69,8 @@ class ConsoleCode
                     string encryptedContent = File.ReadAllText(inputFilePath);
                     var decryptedText = cipher.Decrypt(encryptedContent, secretKey);
                     Console.WriteLine("Расшифрованное сообщение: {0}", decryptedText);
-                    Console.WriteLine(); // Добавляем пустую строку для разделения
+                    Console.WriteLine();
+                    SaveDecryptedFile(decryptedText, "Расшифрованный_" + Path.GetFileName(inputFilePath));
                 }
                 else
                 {
@@ -76,7 +79,7 @@ class ConsoleCode
             }
             Console.Write("Желаете продолжить? (д/any): ");
             var continueChoice = Console.ReadLine();
-            Console.WriteLine(); // Добавляем пустую строку для разделения
+            Console.WriteLine();
             if (continueChoice.ToLower() != "д")
             {
                 continueLoop = false;
@@ -99,30 +102,47 @@ class ConsoleCode
         }
         return secretKey;
     }
-    // Метод для сохранения зашифрованного сообщения в текстовый файл
     private static void SaveEncryptedMessage(string encryptedText)
     {
+        string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ЦЕЗАРЯ");
+        Directory.CreateDirectory(documentsPath);
         Console.Write("Введите имя файла для сохранения (без расширения): ");
         var fileName = Console.ReadLine() + ".txt";
+        var filePath = Path.Combine(documentsPath, fileName);
         try
         {
-            File.WriteAllText(fileName, encryptedText);
-            Console.WriteLine("Зашифрованное сообщение успешно сохранено в файл: {0}", fileName);
+            File.WriteAllText(filePath, encryptedText);
+            Console.WriteLine("Зашифрованное сообщение успешно сохранено в файл: {0}", filePath);
         }
         catch (Exception ex)
         {
             Console.WriteLine("Произошла ошибка при сохранении файла: " + ex.Message);
         }
     }
-    // Метод для сохранения зашифрованного файла в папке "Загрузки"
     private static void SaveEncryptedFile(string encryptedText, string originalFileName)
     {
-        string downloadsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
-        string filePath = Path.Combine(downloadsPath, originalFileName);
+        string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ЦЕЗАРЯ");
+        Directory.CreateDirectory(documentsPath);
+        string filePath = Path.Combine(documentsPath, originalFileName);
         try
         {
             File.WriteAllText(filePath, encryptedText);
-            Console.WriteLine("Зашифрованный файл успешно сохранен в папку 'Загрузки': {0}", filePath);
+            Console.WriteLine("Зашифрованный файл успешно сохранен в папку 'ЦЕЗАРЯ': {0}", filePath);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Произошла ошибка при сохранении файла: " + ex.Message);
+        }
+    }
+    private static void SaveDecryptedFile(string decryptedText, string originalFileName)
+    {
+        string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ЦЕЗАРЯ");
+        Directory.CreateDirectory(documentsPath);
+        string filePath = Path.Combine(documentsPath, originalFileName);
+        try
+        {
+            File.WriteAllText(filePath, decryptedText);
+            Console.WriteLine("Расшифрованный файл успешно сохранен в папку 'ЦЕЗАРЯ': {0}", filePath);
         }
         catch (Exception ex)
         {
