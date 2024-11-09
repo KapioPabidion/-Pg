@@ -6,7 +6,7 @@
         // Строки с символами русской и английской азбуки, а также цифрами
         const string russianAlphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
         const string englishAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-        const string digits = "0123456789";
+        const string digits = "0123456789-1";
         // Метод для кодирования и декодирования текста
         private string CodeEncode(string text, int k)
         {
