@@ -1,16 +1,19 @@
-﻿namespace Caesar
+﻿using System.Linq;
+
+namespace Caesar
 {
     public class CaesarCipher
     {
         const string russianAlphabet = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
-        const string englishAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        const string englishAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         const string digits = "0123456789";
-        // Метод для кодирования и декодирования текста
+
         private string CodeEncode(string text, int k)
         {
             var fullAlphabet = russianAlphabet + englishAlphabet + digits;
             var letterQty = fullAlphabet.Length;
             var retVal = "";
+
             for (int i = 0; i < text.Length; i++)
             {
                 var c = text[i];

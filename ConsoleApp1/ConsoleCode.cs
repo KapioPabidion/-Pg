@@ -1,6 +1,7 @@
 ﻿using Caesar;
 using System;
 using System.IO;
+
 class ConsoleCode
 {
     static void Main(string[] args)
@@ -87,6 +88,7 @@ class ConsoleCode
             }
         }
     }
+
     private static int GetSecretKey()
     {
         int secretKey;
@@ -102,6 +104,7 @@ class ConsoleCode
         }
         return secretKey;
     }
+    // Метод для сохранения зашифрованного сообщения в текстовый файл
     private static void SaveEncryptedMessage(string encryptedText)
     {
         string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ЦЕЗАРЯ");
@@ -148,5 +151,40 @@ class ConsoleCode
         {
             Console.WriteLine("Произошла ошибка при сохранении файла: " + ex.Message);
         }
+    }
+
+    private static string GetFilePath(string prompt, string defaultFileName)
+    {
+        string documentsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ЦЕЗАРЯ");
+        Directory.CreateDirectory(documentsPath);
+
+        Console.Write(prompt);
+        string userInput = Console.ReadLine();
+
+        string filePath;
+        if (string.IsNullOrWhiteSpace(userInput))
+        {
+            // Если пользователь не ввел путь, используем путь по умолчанию
+            filePath = Path.Combine(documentsPath, defaultFileName + ".txt");
+        }
+        else
+        {
+            // Проверяем, существует ли указанный путь
+            try
+            {
+                filePath = Path.Combine(userInput, defaultFileName + ".txt");
+                // Проверяем, существует ли директория
+                if (!Directory.Exists(userInput))
+                {
+                    throw new DirectoryNotFoundException();
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Некорректный путь. Сохранение файла в папку 'ЦЕЗАРЯ'.");
+                filePath = Path.Combine(documentsPath, defaultFileName + ".txt");
+            }
+        }
+        return filePath;
     }
 }
