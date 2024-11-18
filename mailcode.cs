@@ -10,38 +10,56 @@ namespace Caesar
 
         private string CodeEncode(string text, int k)
         {
-            var fullAlphabet = russianAlphabet + englishAlphabet + digits;
-            var letterQty = fullAlphabet.Length;
             var retVal = "";
 
             for (int i = 0; i < text.Length; i++)
             {
                 var c = text[i];
-                // Преобразуем символ в верхний регистр для поиска в алфавите
-                var upperChar = char.ToUpper(c);
-                var index = fullAlphabet.IndexOf(upperChar);
-                if (index < 0)
+                int index;
+
+                // Проверяем, к какому алфавиту принадлежит символ
+                if (russianAlphabet.Contains(char.ToUpper(c)))
                 {
-                    // Если символ не найден в алфавите, оставляем его без изменений
-                    retVal += c.ToString();
+                    index = russianAlphabet.IndexOf(char.ToUpper(c));
+                    var codeIndex = (index + k) % russianAlphabet.Length;
+                    if (codeIndex < 0)
+                    {
+                        codeIndex += russianAlphabet.Length;
+                    }
+                    retVal += char.IsLower(c) ? char.ToLower(russianAlphabet[codeIndex]) : russianAlphabet[codeIndex];
+                }
+                else if (englishAlphabet.Contains(char.ToUpper(c)))
+                {
+                    index = englishAlphabet.IndexOf(char.ToUpper(c));
+                    var codeIndex = (index + k) % englishAlphabet.Length;
+                    if (codeIndex < 0)
+                    {
+                        codeIndex += englishAlphabet.Length;
+                    }
+                    retVal += char.IsLower(c) ? char.ToLower(englishAlphabet[codeIndex]) : englishAlphabet[codeIndex];
+                }
+                else if (digits.Contains(c))
+                {
+                    index = digits.IndexOf(c);
+                    var codeIndex = (index + k) % digits.Length;
+                    if (codeIndex < 0)
+                    {
+                        codeIndex += digits.Length;
+                    }
+                    retVal += digits[codeIndex];
                 }
                 else
                 {
-                    // Шифруем символ, смещая его на k позиций в алфавите
-                    var codeIndex = (index + k) % letterQty;
-                    // Обрабатываем случай, когда codeIndex отрицательный
-                    if (codeIndex < 0)
-                    {
-                        codeIndex += letterQty;
-                    }
-                    // Добавляем зашифрованный символ в результат
-                    retVal += fullAlphabet[codeIndex];
+                    // Если символ не найден в алфавитах, оставляем его без изменений
+                    retVal += c.ToString();
                 }
             }
             return retVal;
         }
+
         public string Encrypt(string plainMessage, int key)
             => CodeEncode(plainMessage, key);
+
         public string Decrypt(string encryptedMessage, int key)
             => CodeEncode(encryptedMessage, -key);
     }
