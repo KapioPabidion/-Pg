@@ -1,70 +1,89 @@
-﻿using Caesar;
-using System;
-using System.IO;
+﻿using System;
 
-class ConsoleCode
+public class Program
 {
-    private readonly CaesarCipher cipher;
-    private readonly ModeHandler modeHandler;
-
-    public ConsoleCode()
+    public static void Main(string[] args)
     {
-        cipher = new CaesarCipher();
-        modeHandler = new ModeHandler(cipher);
-    }
+        ModeHandler modeHandler = new ModeHandler();
 
-    static void Main(string[] args)
-    {
-        var consoleCode = new ConsoleCode();
-        consoleCode.Run();
-    }
-
-    public void Run()
-    {
-        bool continueLoop = true;
-        while (continueLoop)
-        {
-            int modeChoice = GetModeChoice();
-            switch (modeChoice)
-            {
-                case 1:
-                    modeHandler.EncryptText();
-                    break;
-                case 2:
-                    modeHandler.DecryptText();
-                    break;
-                case 3:
-                    modeHandler.EncryptFile();
-                    break;
-                case 4:
-                    modeHandler.DecryptFile();
-                    break;
-            }
-            continueLoop = AskToContinue();
-        }
-    }
-
-    private int GetModeChoice()
-    {
-        int modeChoice;
         while (true)
         {
-            Console.Write("Выберите режим (1 - Зашифровать текст, 2 - Расшифровать текст, 3 - Зашифровать файл, 4 - Расшифровать файл): ");
-            if (int.TryParse(Console.ReadLine(), out modeChoice) && (modeChoice >= 1 && modeChoice <= 4))
+            Console.WriteLine(new string('-', 40)); // Разделитель
+            Console.WriteLine("Выберите действие:");
+            Console.WriteLine("1. Шифровать текст");
+            Console.WriteLine("2. Дешифровать текст");
+            Console.WriteLine("3. Шифровать файл");
+            Console.WriteLine("4. Дешифровать файл");
+            Console.WriteLine(new string('-', 40)); // Разделитель
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
             {
-                break;
+                case "1":
+                    // Шифрование текста
+                    Console.WriteLine(new string('-', 40)); // Разделитель
+                    Console.WriteLine();
+                    string textToEncrypt = GetUserInput("Введите текст для шифрования: ");
+                    int encryptionKey = GetUserInputAsInt("Введите ключ: ");
+                    string encryptedText = modeHandler.EncryptText(textToEncrypt, encryptionKey);
+                    Console.WriteLine("Зашифрованный текст: {0}", encryptedText);
+                    Console.WriteLine();
+                    Console.WriteLine(new string('-', 40)); // Разделитель
+                    break;
+                case "2":
+                    // Дешифрование текста
+                    Console.WriteLine(new string('-', 40)); // Разделитель
+                    Console.WriteLine();
+                    string textToDecrypt = GetUserInput("Введите зашифрованный текст: ");
+                    int decryptionKey = GetUserInputAsInt("Введите ключ: ");
+                    string decryptedText = modeHandler.DecryptText(textToDecrypt, decryptionKey);
+                    Console.WriteLine("Расшифрованное сообщение: {0}", decryptedText);
+                    Console.WriteLine();
+                    Console.WriteLine(new string('-', 40)); // Разделитель
+                    break;
+                case "3":
+                    // Шифрование файла
+                    Console.WriteLine(new string('-', 40)); // Разделитель
+                    Console.WriteLine();
+                    modeHandler.EncryptFile();
+                    Console.WriteLine();
+                    Console.WriteLine(new string('-', 40)); // Разделитель
+                    break;
+                case "4":
+                    // Дешифрование файла
+                    Console.WriteLine(new string('-', 40)); // Разделитель
+                    Console.WriteLine();
+                    modeHandler.DecryptFile();
+                    Console.WriteLine();
+                    Console.WriteLine(new string('-', 40)); // Разделитель
+                    break;
+                default:
+                    Console.WriteLine("Неверный выбор. Пожалуйста, попробуйте снова.");
+                    Console.WriteLine();
+                    break;
             }
-            Console.WriteLine("Некорректный выбор режима. Пожалуйста, выберите 1, 2, 3 или 4.");
-            Console.WriteLine();
         }
-        return modeChoice;
     }
 
-    private bool AskToContinue()
+    private static string GetUserInput(string prompt)
     {
-        Console.Write("Желаете продолжить? (д/any): ");
-        var continueChoice = Console.ReadLine();
-        Console.WriteLine();
-        return continueChoice.ToLower() == "д";
+        Console.Write(prompt);
+        return Console.ReadLine();
+    }
+
+    private static int GetUserInputAsInt(string prompt)
+    {
+        int input;
+        while (true)
+        {
+            Console.Write(prompt);
+            if (int.TryParse(Console.ReadLine(), out input))
+            {
+                return input;
+            }
+            Console.WriteLine("Неверный ввод. Пожалуйста, введите целое число.");
+            Console.WriteLine();
+        }
     }
 }
