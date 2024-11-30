@@ -2,6 +2,8 @@
 
 public class Program
 {
+
+
     public static void Main(string[] args)
     {
         ModeHandler modeHandler = new ModeHandler();
@@ -24,8 +26,8 @@ public class Program
                     // Шифрование текста
                     Console.WriteLine(new string('-', 40)); // Разделитель
                     Console.WriteLine();
-                    string textToEncrypt = GetUserInput("Введите текст для шифрования: ");
-                    int encryptionKey = GetUserInputAsInt("Введите ключ: ");
+                    string textToEncrypt = ModeHandler.GetUserInput("Введите текст для шифрования: ");
+                    int encryptionKey = ModeHandler.GetUserInputAsInt("Введите ключ: ");
                     string encryptedText = modeHandler.EncryptText(textToEncrypt, encryptionKey);
                     Console.WriteLine("Зашифрованный текст: {0}", encryptedText);
                     Console.WriteLine();
@@ -35,8 +37,8 @@ public class Program
                     // Дешифрование текста
                     Console.WriteLine(new string('-', 40)); // Разделитель
                     Console.WriteLine();
-                    string textToDecrypt = GetUserInput("Введите зашифрованный текст: ");
-                    int decryptionKey = GetUserInputAsInt("Введите ключ: ");
+                    string textToDecrypt = ModeHandler.GetUserInput("Введите зашифрованный текст: ");
+                    int decryptionKey = ModeHandler.GetUserInputAsInt("Введите ключ: ");
                     string decryptedText = modeHandler.DecryptText(textToDecrypt, decryptionKey);
                     Console.WriteLine("Расшифрованное сообщение: {0}", decryptedText);
                     Console.WriteLine();
@@ -66,24 +68,6 @@ public class Program
         }
     }
 
-    private static string GetUserInput(string prompt)
-    {
-        Console.Write(prompt);
-        return Console.ReadLine();
-    }
 
-    private static int GetUserInputAsInt(string prompt)
-    {
-        int input;
-        while (true)
-        {
-            Console.Write(prompt);
-            if (int.TryParse(Console.ReadLine(), out input))
-            {
-                return input;
-            }
-            Console.WriteLine("Неверный ввод. Пожалуйста, введите целое число.");
-            Console.WriteLine();
-        }
-    }
+
 }

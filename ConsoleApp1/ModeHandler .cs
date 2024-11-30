@@ -11,10 +11,16 @@ public class ModeHandler
         cipher = new CaesarCipher();
     }
 
+    static public string GetUserInput(string prompt)
+    {
+        Console.Write(prompt);
+        return Console.ReadLine();
+    }
+
     public string EncryptText(string message, int secretKey)
     {
         var encryptedText = cipher.Encrypt(message, secretKey);
-        SaveToFile(encryptedText); // Сохраняем зашифрованный текст в файл
+     //  SaveToFile(encryptedText); // Сохраняем зашифрованный текст в файл
         return encryptedText; // Возвращаем зашифрованный текст
     }
 
@@ -56,13 +62,6 @@ public class ModeHandler
             Console.WriteLine("Файл не найден. Пожалуйста, проверьте путь и попробуйте снова.");
         }
     }
-
-    private string GetUserInput(string prompt)
-    {
-        Console.Write(prompt);
-        return Console.ReadLine();
-    }
-
     private int GetKeyFromFileCreationTime(string filePath)
     {
         DateTime creationTime = File.GetCreationTime(filePath);
@@ -86,6 +85,24 @@ public class ModeHandler
         catch (Exception ex)
         {
             Console.WriteLine("Ошибка при сохранении файла: " + ex.Message);
+        }
+    }
+
+
+
+
+    public static int GetUserInputAsInt(string prompt)
+    {
+        int input;
+        while (true)
+        {
+            Console.Write(prompt);
+            if (int.TryParse(Console.ReadLine(), out input))
+            {
+                return input;
+            }
+            Console.WriteLine("Неверный ввод. Пожалуйста, введите целое число.");
+            Console.WriteLine();
         }
     }
 }
